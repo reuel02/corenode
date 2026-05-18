@@ -5,10 +5,34 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma]"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+}
+
+model Tenant {
+  id  String @id @default(uuid())
+  name String
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  users User[]
+}
+
+
+model User {
+  id  String @id @default(uuid())
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
+  tenant_id String
+  name String
+  email String @unique
+  password_hash String
+  role String @default("OWNER")
+  reset_token String?
+  reset_expires DateTime?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
