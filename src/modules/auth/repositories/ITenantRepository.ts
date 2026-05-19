@@ -1,5 +1,8 @@
-import { Prisma, Tenant } from "@prisma/client";
+import { Prisma, Tenant, User } from "@prisma/client";
 
 export interface ITenantRepository {
-    create(data: Prisma.TenantUncheckedCreateInput): Promise<Tenant>
+    createWithOwner(
+        tenantData: Prisma.TenantUncheckedCreateInput, 
+        userData: Omit<Prisma.UserUncheckedCreateInput, 'tenant_id' | 'role'>
+    ): Promise<{ tenant: Tenant; user: User }>
 }
