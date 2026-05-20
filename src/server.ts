@@ -1,19 +1,22 @@
 import Fastify from 'fastify';
 import { registerTenantController } from './modules/auth/controllers/RegisterTenantController';
+import { authRoutes } from './modules/auth/auth.routes';
+import fastifyJwt from '@fastify/jwt'
 
-const fastify = Fastify({
+const app = Fastify({
     logger: true
 })
 
-fastify.post('api/auth/register', registerTenantController)
+app.get('/health', async () => {
+  return { status: 'CoreNode está online e operante!' };
+});
 
-async function start() {
-  try {
-    await fastify.listen({ port: 3000 })
-  } catch (err) {
-    fastify.log.error(err)
-    process.exit(1)
+app.register(authRoutes, { prefix: '/api/auth' })
+
+app.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
   }
-}
-
-start()
+  console.log(`🚀 Servidor rodando em ${address}`);
+});
