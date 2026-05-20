@@ -1,7 +1,6 @@
 import { PrismaClient, Prisma, User } from "@prisma/client"
 import { IUserRepository } from './IUserRepository'
-
-const prisma = new PrismaClient()
+import { prisma } from "../../../lib/prisma"
 
 export class PrismaUsersRepository implements IUserRepository {
 
