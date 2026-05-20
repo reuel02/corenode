@@ -27,6 +27,8 @@ export class AuthenticateUserService {
         }, 
         process.env.JWT_SECRET!, 
         { expiresIn: '1d' }
-    )
+        )
+
+        return token
     }
 }
