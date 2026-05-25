@@ -2,13 +2,20 @@ import bcrypt from "bcryptjs"
 import { IUserRepository } from "../repositories/IUserRepository"
 import { ITenantRepository } from "../repositories/ITenantRepository"
 
+interface RegisterTenantData {
+    companyName: string
+    userName: string
+    email: string
+    password: string
+}
+
 export class RegisterTenantService {
     constructor(
         private usersRepository: IUserRepository,
         private tenantsRepository: ITenantRepository
     ) {}
 
-    async execute(data: any) {
+    async execute(data: RegisterTenantData) {
         const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
         if (userAlreadyExists) {
@@ -18,7 +25,7 @@ export class RegisterTenantService {
         const hashedPassword = await bcrypt.hash(data.password, 10)
 
         const result = await this.tenantsRepository.createWithOwner(
-            { name: data.companyName },
+            { name: data.companyName }, 
             {
                 name: data.userName,
                 email: data.email,
