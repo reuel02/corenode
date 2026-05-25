@@ -7,6 +7,8 @@ const app = Fastify({
     logger: true
 })
 
+app.decorateRequest('user', null)
+
 app.get('/health', async () => {
   return { status: 'CoreNode está online e operante!' };
 });

@@ -2,12 +2,17 @@ import bcrypt from "bcryptjs";
 import { IUserRepository } from "../repositories/IUserRepository";
 import jwt from 'jsonwebtoken';
 
+interface AuthenticateUserData {
+    email: string
+    password: string
+}
+
 export class AuthenticateUserService {
     constructor(
         private usersRepository: IUserRepository
     ) {}
 
-    async execute(data: any) {
+    async execute(data: AuthenticateUserData) {
         const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
         if (!userAlreadyExists) {

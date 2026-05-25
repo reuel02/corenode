@@ -1,6 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import jwt from 'jsonwebtoken'
 
+interface DecodedToken {
+    sub: string
+    tenant_id: string 
+    role: string
+    iat: number
+    exp: number
+}
+
 export async function authMiddleware(request: FastifyRequest, reply: FastifyReply) {
     const authHeader = request.headers.authorization
     
@@ -18,9 +26,17 @@ export async function authMiddleware(request: FastifyRequest, reply: FastifyRepl
 
     const token = parts[1]
 
-    const tokenIsValid = jwt.verify(token!, process.env.JWT_SECRET!)
+    const decodedToken = jwt.verify(token!, process.env.JWT_SECRET!) as DecodedToken
 
-    if (!tokenIsValid) {
+    if (!decodedToken) {
         return reply.status(401).send({ message: "Token inválido ou expirou"})
     }
+
+    const userData = {
+        id: decodedToken.sub,
+        role: decodedToken.role,
+        tenant_id: decodedToken.tenant_id
+    }
+
+    request.user = userData
 }
