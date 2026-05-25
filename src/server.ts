@@ -1,7 +1,8 @@
 import Fastify from 'fastify';
 import { registerTenantController } from './modules/auth/controllers/RegisterTenantController';
-import { authRoutes } from './modules/auth/auth.routes';
 import fastifyJwt from '@fastify/jwt'
+import { authRoutes } from './modules/auth/auth.routes';
+import { tenantRoutes } from './modules/tenant/tenant.routes';
 
 const app = Fastify({
     logger: true
@@ -14,6 +15,7 @@ app.get('/health', async () => {
 });
 
 app.register(authRoutes, { prefix: '/api/auth' })
+app.register(tenantRoutes, { prefix: '/api/tenant' })
 
 app.listen({ port: 3000 }, (err, address) => {
   if (err) {
