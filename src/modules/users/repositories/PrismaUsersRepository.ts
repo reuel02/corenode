@@ -32,4 +32,14 @@ export class PrismaUsersRepository implements IUserRepository {
 
     return user;
   }
+
+  async findByResetToken(token: string): Promise<User | null> {
+    const user = await prisma.user.findFirst({
+      where: {
+        reset_token: token
+      }
+    })
+
+    return user
+  }
 }
