@@ -6,4 +6,6 @@ export interface IUserRepository {
     update(email: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
 
     findByEmail(email: string): Promise<User | null>
+
+    findByResetToken(token: string): Promise<User | null>
 }
